@@ -33,7 +33,7 @@ LIB	= $(obj)lib$(BOARD).o
 COBJS-y	:= tiny4412.o
 COBJS-y	+= pmic.o
 SOBJS	:= lowlevel_init.o
-SOBJS	+= mem_init_tiny4412.o
+SOBJS	+= mem_init_tiny4412.o mem_init_tiny4412_r1.o mem_init_tiny4412_r2.o
 SOBJS	+= clock_init_tiny4412.o
 
 SRCS    := $(SOBJS:.o=.S) $(COBJS-y:.o=.c)

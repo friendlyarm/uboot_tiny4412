@@ -19,10 +19,13 @@
 #define MCLK_330
 #endif
 
-#define DRAM_USES_CS1		1
+#define DRAM_USES_CS1		0
 
-	.globl mem_ctrl_asm_init_r0
-mem_ctrl_asm_init_r0:
+#undef  CONFIG_IV_SIZE
+#define CONFIG_IV_SIZE		0x09
+
+	.globl mem_ctrl_asm_init_r2
+mem_ctrl_asm_init_r2:
 
 	/* Async bridge configuration at CPU_core:
 	 * 1: half_sync
@@ -68,13 +71,15 @@ mem_ctrl_asm_init_r0:
 
 	ldr	r1, =0x0FFF301A
 	str	r1, [r0, #DMC_CONCONTROL]
-	ldr	r1, =0x00312640
+	ldr	r1, =0x00302640
 	str	r1, [r0, #DMC_MEMCONTROL]
 
-	ldr	r1, =0x40e01323
+	ldr	r1, =0x40801333
 	str	r1, [r0, #DMC_MEMCONFIG0]
-	ldr	r1, =0x60e01323
+#if DRAM_USES_CS1
+	ldr	r1, =0x80C01333
 	str	r1, [r0, #DMC_MEMCONFIG1]
+#endif
 
 #ifdef CONFIG_IV_SIZE
 	ldr	r1, =(0x80000000 | CONFIG_IV_SIZE)
@@ -98,7 +103,7 @@ mem_ctrl_asm_init_r0:
 	str	r1, [r0, #DMC_TIMINGPOWER]
 #endif
 #ifdef MCLK_400
-	ldr	r1, =0x4046654f
+	ldr	r1, =0x6946654f
 	str	r1, [r0, #DMC_TIMINGROW] @TimingRow
 	ldr	r1, =0x46400506
 	str	r1, [r0, #DMC_TIMINGDATA] @TimingData
@@ -210,13 +215,15 @@ mem_ctrl_asm_init_r0:
 
 	ldr	r1, =0x0FFF301A
 	str	r1, [r0, #DMC_CONCONTROL]
-	ldr	r1, =0x00312640
+	ldr	r1, =0x00302640
 	str	r1, [r0, #DMC_MEMCONTROL]
 
-	ldr	r1, =0x40e01323			@Interleaved?
+	ldr	r1, =0x40801333			@Interleaved?
 	str	r1, [r0, #DMC_MEMCONFIG0]
-	ldr	r1, =0x60e01323
+#if DRAM_USES_CS1
+	ldr	r1, =0x80C01333
 	str	r1, [r0, #DMC_MEMCONFIG1]
+#endif
 
 #ifdef CONFIG_IV_SIZE
 	ldr	r1, =(0x80000000 | CONFIG_IV_SIZE)
@@ -240,7 +247,7 @@ mem_ctrl_asm_init_r0:
 	str	r1, [r0, #DMC_TIMINGPOWER]
 #endif
 #ifdef MCLK_400
-	ldr	r1, =0x4046654f
+	ldr	r1, =0x6946654f
 	str	r1, [r0, #DMC_TIMINGROW] @TimingRow
 	ldr	r1, =0x46400506
 	str	r1, [r0, #DMC_TIMINGDATA] @TimingData
