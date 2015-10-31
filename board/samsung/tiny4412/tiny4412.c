@@ -71,6 +71,11 @@ static void smc9115_pre_init(void)
 }
 #endif
 
+int board_get_hwrev(void)
+{
+	return (__REG(0x110002C4) >> 5);
+}
+
 int board_init(void)
 {
 	char bl1_version[9] = {0};
@@ -196,8 +201,25 @@ void dram_init_banksize(void)
 	gd->bd->bi_dram[3].start = PHYS_SDRAM_4;
 	gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;
 
+	gd->bd->bi_dram[4].start = PHYS_SDRAM_5;
+	gd->bd->bi_dram[4].size = PHYS_SDRAM_5_SIZE;
+	gd->bd->bi_dram[5].start = PHYS_SDRAM_6;
+	gd->bd->bi_dram[5].size = PHYS_SDRAM_6_SIZE;
+	gd->bd->bi_dram[6].start = PHYS_SDRAM_7;
+	gd->bd->bi_dram[6].size = PHYS_SDRAM_7_SIZE;
+	gd->bd->bi_dram[7].start = PHYS_SDRAM_8;
+	gd->bd->bi_dram[7].size = PHYS_SDRAM_8_SIZE;
+
+	if (board_get_hwrev() == 0x2) {
+		nr_dram_banks = 8;
+	}
+
 #ifdef CONFIG_TRUSTZONE
 	gd->bd->bi_dram[nr_dram_banks - 1].size -= CONFIG_TRUSTZONE_RESERVED_DRAM;
+	if (nr_dram_banks > 4) {
+		/* 0x7ff00000~0x7fffffff is *NOT* writeable */
+		gd->bd->bi_dram[3].size -= CONFIG_TRUSTZONE_RESERVED_DRAM;
+	}
 #endif
 }
 
