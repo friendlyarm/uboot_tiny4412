@@ -226,7 +226,7 @@
 
 #define CONFIG_BOOTDELAY	3
 /* Default boot commands for Android booting. */
-#define CONFIG_BOOTCOMMAND	"movi read kernel 0 40008000;movi read rootfs 0 41000000 100000;bootm 40008000 41000000"
+#define CONFIG_BOOTCOMMAND	"movi read kernel 0 40008000;movi read rootfs 0 41000000 400000;bootm 40008000 41000000"
 #define CONFIG_BOOTARGS	""
 
 #define CONFIG_BOOTCOMMAND2	\
