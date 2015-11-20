@@ -20,10 +20,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA 02111-1307 USA
 #
-PLATFORM_RELFLAGS += -fno-common -ffixed-r8 -msoft-float
+PLATFORM_RELFLAGS += -fno-common -ffixed-r8
 
 # Make ARMv5 to allow more compilers to work, even though its v7a.
 PLATFORM_CPPFLAGS += -march=armv7-a
+
+# On supported platforms we set the bit which causes us to trap on unaligned
+# memory access.  This is the opposite of what the compiler expects to be
+# the default so we must pass in -mno-unaligned-access so that it is aware
+# of our decision.
+PF_NO_UNALIGNED := $(call cc-option, -mno-unaligned-access,)
+PLATFORM_CPPFLAGS += $(PF_NO_UNALIGNED)
+
 # =========================================================================
 #
 # Supply options according to compiler version
